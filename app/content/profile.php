@@ -36,7 +36,9 @@ return [
             ],
             'badges' => [
                 ['img' => 'logos/sophos-authorized-partner.webp', 'alt' => 'Sophos Authorised Partner'],
+                ['img' => 'logos/sophos-endpoint-xdr-partner.webp', 'alt' => 'Sophos Endpoint & XDR Partner'],
                 ['img' => 'logos/zoho-partner.webp', 'alt' => 'Zoho Partner'],
+                ['img' => 'logos/hostinger-partner.webp', 'alt' => 'Hostinger Partner'],
             ],
         ],
         [
