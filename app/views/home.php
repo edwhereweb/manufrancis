@@ -29,9 +29,7 @@ $aria = fn (string $field) => isset($errors[$field]) ? ' aria-invalid="true" ari
         <img src="<?= $img('photos/manu-francis-hero.webp') ?>" width="600" height="400" alt="Manu Francis" fetchpriority="high">
       </figure>
       <div class="float-card fc-1"><img src="<?= $img('logos/ec-council.webp') ?>" alt="" width="84" height="19"><span>CEH &middot; CEI &middot; CSA</span></div>
-      <div class="float-card fc-2"><span class="ok-dot" aria-hidden="true"></span><span><strong>100+</strong> organisations secured</span></div>
-      <div class="float-card fc-3"><span class="mini-badge">ATC</span><span>EC-Council Accredited Training Centre</span></div>
-    </div>
+      <div class="float-card fc-2"><span class="ok-dot" aria-hidden="true"></span><span><strong>100+</strong> organisations secured</span></div>    </div>
   </div>
 
   <div class="wrap">

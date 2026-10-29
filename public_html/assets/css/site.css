@@ -119,16 +119,14 @@ p { margin: 0 0 1em; }
 .float-card img { width: 84px; height: auto; }
 .fc-1 { top: 9%; left: -2%; }
 .fc-2 { bottom: 16%; left: -6%; }
-.fc-3 { bottom: 4%; right: 0; }
 .ok-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 5px rgba(12, 159, 123, .15); }
-.mini-badge { display: grid; place-items: center; height: 26px; padding: 0 8px; border-radius: 8px; background: var(--blue); color: #fff; font-size: .72rem; font-weight: 700; }
 @media (max-width: 960px) {
   .hero-grid { grid-template-columns: 1fr; }
   .hero-stage { max-width: 520px; width: 100%; margin-inline: auto; }
 }
 @media (max-width: 520px) {
   .float-card { font-size: .75rem; padding: 8px 10px; }
-  .fc-1 { left: 0; } .fc-2 { left: 0; } .fc-3 { right: 0; bottom: 0; }
+  .fc-1 { left: 0; } .fc-2 { left: 0; }
   .float-card img { width: 64px; }
 }
 
@@ -295,7 +293,7 @@ p { margin: 0 0 1em; }
   .blink { animation: blink 1.1s steps(1) infinite; }
   .float { animation: float 4s ease-in-out infinite; }
   .float-card { animation: float 6s ease-in-out infinite; }
-  .fc-2 { animation-delay: -2s; } .fc-3 { animation-delay: -4s; }
+  .fc-2 { animation-delay: -2s; }
 
   .js .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
   .js .reveal.in { opacity: 1; transform: none; }
