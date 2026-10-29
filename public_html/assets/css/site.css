@@ -59,7 +59,7 @@ p { margin: 0 0 1em; }
 .lead { font-size: 1.2rem; color: var(--muted); max-width: 34em; }
 .body-lg { font-size: 1.15rem; color: #3a3a40; }
 .muted { color: var(--muted); }
-.muted-dark { color: #6b6b75; }
+.muted-dark { color: #8b8b96; }
 .small { font-size: .875rem; }
 .sub { margin-top: 48px; }
 .grad { background: linear-gradient(92deg, var(--blue), var(--violet) 55%, var(--mint)); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -91,7 +91,7 @@ p { margin: 0 0 1em; }
 .nav-links a:not(.btn) { color: #3a3a40; }
 .nav-links a:not(.btn):hover { color: var(--ink); text-decoration: none; }
 .nav-links .btn { min-height: 36px; padding: 0 16px; font-size: .9rem; }
-.nav-toggle { display: none; background: none; border: 1px solid var(--line); color: var(--ink); border-radius: 999px; padding: 6px 14px; font: inherit; font-size: .9rem; cursor: pointer; }
+.nav-toggle { display: none; min-height: 44px; background: none; border: 1px solid var(--line); color: var(--ink); border-radius: 999px; padding: 6px 16px; font: inherit; font-size: .9rem; cursor: pointer; }
 @media (max-width: 860px) {
   .nav-toggle { display: inline-block; }
   .nav-links { display: none; position: absolute; inset: 60px 0 auto 0; flex-direction: column; align-items: stretch; gap: 0; padding: 8px 20px 24px; background: rgba(255, 255, 255, .97); border-bottom: 1px solid var(--line); font-size: 1.05rem; }
@@ -359,8 +359,8 @@ p { margin: 0 0 1em; }
 .sub-tight { margin-top: 16px; }
 
 /* Social profile links */
-.social { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0; list-style: none; }
-.social a { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; color: var(--muted); transition: color .2s, background .2s, transform .2s var(--ease); }
+.social { display: flex; flex-wrap: wrap; gap: 2px; padding: 0; margin: 0; list-style: none; }
+.social a { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; color: var(--muted); transition: color .2s, background .2s, transform .2s var(--ease); }
 .social a:hover { color: var(--ink); background: var(--bg-alt); transform: translateY(-1px); text-decoration: none; }
 .social-icon { width: 17px; height: 17px; }
 .social-lg { gap: 10px; margin: 6px 0 28px; }

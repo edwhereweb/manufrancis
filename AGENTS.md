@@ -40,6 +40,14 @@ Calm, product-style layout: white and `#f5f5f7` sections, one dark band each for
 - **Motion**: add `reveal` (+ `d1`/`d2` for stagger) to fade a block in on scroll; `data-count` on a stat counts it up. All motion is off under `prefers-reduced-motion`.
 - **Photos**: 1200px wide `.webp`, real event photos only, no stamped/overlaid images. Gallery tiles take `size` `wide` or `normal` in `profile.php`.
 
+## SEO
+
+- Home title and meta description live in `profile.php` (`seo`). Keep the title 50-60 chars and descriptions under 160. Other pages pass `description` to `view()`; pass `noindex => true` for pages that should not be indexed.
+- Structured data (`ProfilePage` + `Person`) is built from `profile.php` in `app/views/partials/schema.php`. Only facts from the profile.
+- Link previews use `public_html/assets/img/share/manu-francis-share.jpg` (1200x630 JPG). Regenerate it if the name, role or headline changes.
+- Give every `<img>` a width and height (`img_size()` reads them from the file).
+- Add new public URLs to `public_html/sitemap.xml` and update `<lastmod>` when content changes.
+
 ## Naming
 
 - Files and folders: lowercase kebab-case (`hash-password.php`, `manu-francis-hero.webp`).

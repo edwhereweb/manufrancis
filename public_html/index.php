@@ -16,11 +16,14 @@ if ($path === '/') {
     if (is_post()) {
         require APP_ROOT . '/handlers/contact.php';
     }
-    view('home', ['title' => 'Manu Francis | Cybersecurity Architect & Founder', 'sent' => isset($_GET['sent'])]);
+    view('home', ['title' => (require APP_ROOT . '/content/profile.php')['seo']['title'], 'sent' => isset($_GET['sent'])]);
 }
 
 if ($path === '/privacy') {
-    view('privacy', ['title' => 'Privacy Policy | Manu Francis']);
+    view('privacy', [
+        'title'       => 'Privacy Policy | Manu Francis',
+        'description' => 'How manufrancis.com handles your data: no tracking or cookies, enquiries used only to reply, automatic deletion, and your rights under GDPR.',
+    ]);
 }
 
 // ---- Admin (lead management) ---------------------------------------------

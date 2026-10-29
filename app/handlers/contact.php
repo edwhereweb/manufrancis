@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /** POST / : public contact form. Re-renders the form with errors, or redirects on success. */
 
-$title = 'Manu Francis | Cybersecurity Architect & Founder';
+$title = (require APP_ROOT . '/content/profile.php')['seo']['title'];
 $fail = fn (array $errors, array $old = []) => view('home', ['title' => $title, 'errors' => $errors, 'old' => $old], 'layout', 422);
 
 // Bots: honeypot filled in, or no valid signed token. Pretend success so they learn nothing.

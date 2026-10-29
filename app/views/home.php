@@ -103,7 +103,7 @@ $aria = fn (string $field) => isset($errors[$field]) ? ' aria-invalid="true" ari
     <div class="ventures">
       <?php foreach ($p['ventures'] as $i => $v) : ?>
         <article class="venture reveal d<?= $i ?>">
-          <div class="venture-logo"><img src="<?= $img($v['logo']) ?>" alt="<?= e($v['name']) ?> logo" loading="lazy"></div>
+          <div class="venture-logo"><img src="<?= $img($v['logo']) ?>"<?= img_size($v['logo']) ?> alt="<?= e($v['name']) ?> logo" loading="lazy"></div>
           <h3><?= e($v['name']) ?></h3>
           <p class="muted"><?= e($v['role']) ?></p>
           <ul class="ticks">
@@ -111,7 +111,7 @@ $aria = fn (string $field) => isset($errors[$field]) ? ' aria-invalid="true" ari
           </ul>
           <div class="badges">
             <?php foreach ($v['badges'] as $b) : ?>
-              <img src="<?= $img($b['img']) ?>" alt="<?= e($b['alt']) ?>" title="<?= e($b['alt']) ?>" loading="lazy">
+              <img src="<?= $img($b['img']) ?>"<?= img_size($b['img']) ?> alt="<?= e($b['alt']) ?>" title="<?= e($b['alt']) ?>" loading="lazy">
             <?php endforeach; ?>
           </div>
         </article>
@@ -125,12 +125,12 @@ $aria = fn (string $field) => isset($errors[$field]) ? ' aria-invalid="true" ari
   <div class="wrap">
     <div class="section-head reveal">
       <p class="eyebrow">In the classroom</p>
-      <h2>40,000+ students trained.<br><span class="muted-dark">For government and non-government clients.</span></h2>
+      <h2>40,000+ students trained.<br> <span class="muted-dark">For government and non-government clients.</span></h2>
     </div>
     <div class="gallery">
       <?php foreach ($p['gallery'] as $i => $g) : ?>
         <figure class="shot shot-<?= e($g['size']) ?> reveal d<?= $i % 3 ?>">
-          <img src="<?= $img($g['img']) ?>" alt="<?= e($g['alt']) ?>" loading="lazy">
+          <img src="<?= $img($g['img']) ?>"<?= img_size($g['img']) ?> alt="<?= e($g['alt']) ?>" loading="lazy">
           <figcaption><?= e($g['caption']) ?></figcaption>
         </figure>
       <?php endforeach; ?>
@@ -148,7 +148,7 @@ $aria = fn (string $field) => isset($errors[$field]) ? ' aria-invalid="true" ari
     <ul class="logos reveal">
       <?php foreach ($p['associations'] as $a) : ?>
         <li class="<?= $a['img'] ? '' : 'text-only' ?>">
-          <?php if ($a['img']) : ?><img src="<?= $img($a['img']) ?>" alt="" loading="lazy"><?php endif; ?>
+          <?php if ($a['img']) : ?><img src="<?= $img($a['img']) ?>"<?= img_size($a['img']) ?> alt="" loading="lazy"><?php endif; ?>
           <span><?= e($a['name']) ?></span>
         </li>
       <?php endforeach; ?>
@@ -162,7 +162,7 @@ $aria = fn (string $field) => isset($errors[$field]) ? ' aria-invalid="true" ari
     <div class="cred-card reveal">
       <p class="eyebrow">Certifications</p>
       <h2>EC-Council certified.</h2>
-      <img class="cred-logo" src="<?= $img('logos/ec-council.webp') ?>" alt="EC-Council" loading="lazy">
+      <img class="cred-logo" src="<?= $img('logos/ec-council.webp') ?>"<?= img_size('logos/ec-council.webp') ?> alt="EC-Council" loading="lazy">
       <ul class="cred-list">
         <?php foreach ($p['certifications'] as $c) : ?>
           <li><span class="code"><?= e($c['code']) ?></span><span><?= e($c['title']) ?></span></li>
@@ -176,7 +176,7 @@ $aria = fn (string $field) => isset($errors[$field]) ? ' aria-invalid="true" ari
         <?php foreach ($p['education'] as $ed) : ?>
           <li>
             <span>
-              <?php if ($ed['img']) : ?><img class="edu-logo" src="<?= $img($ed['img']) ?>" alt="" loading="lazy"><?php endif; ?>
+              <?php if ($ed['img']) : ?><img class="edu-logo" src="<?= $img($ed['img']) ?>"<?= img_size($ed['img']) ?> alt="" loading="lazy"><?php endif; ?>
               <strong><?= e($ed['title']) ?></strong>
               <?php if ($ed['where']) : ?><small><?= e($ed['where']) ?></small><?php endif; ?>
             </span>

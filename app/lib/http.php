@@ -61,7 +61,19 @@ function view(string $name, array $vars = [], ?string $layout = 'layout', int $s
 
 function not_found(): never
 {
-    view('404', ['title' => 'Page not found'], 'layout', 404);
+    view('404', ['title' => 'Page not found | Manu Francis', 'description' => 'This page does not exist.', 'noindex' => true], 'layout', 404);
+}
+
+/** ' width="W" height="H"' read from an image under public_html/assets/img (prevents layout shift). */
+function img_size(string $path): string
+{
+    static $cache = [];
+    if (!isset($cache[$path])) {
+        $info = @getimagesize(dirname(APP_ROOT) . '/public_html/assets/img/' . $path);
+        $cache[$path] = $info ? sprintf(' width="%d" height="%d"', $info[0], $info[1]) : '';
+    }
+
+    return $cache[$path];
 }
 
 /** Cache-busted asset URL. */

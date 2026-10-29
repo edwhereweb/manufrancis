@@ -1,10 +1,21 @@
 <?php
-/** @var string $title @var string $content */
-$siteUrl = rtrim((string) cfg('site_url'), '/');
-$description = 'Manu Francis: Founder & Technical Architect of Halosec Cyber Defense LLP and Phoger Edwhere Learning LLP. 10+ years in cybersecurity, IT infrastructure and software engineering. CEH, CEI, CSA.';
-$canonical = $siteUrl . (request_path() === '/' ? '/' : request_path());
+/**
+ * Public page layout.
+ * @var string $title        page title (50-60 chars on the home page)
+ * @var string $content      rendered page body
+ * @var string $description  optional per-page meta description (keep under 160 chars)
+ * @var bool   $noindex      optional; true for pages search engines should skip (404)
+ */
 require_once APP_ROOT . '/views/partials/social.php';
-$social = (require APP_ROOT . '/content/profile.php')['social'];
+require_once APP_ROOT . '/views/partials/schema.php';
+$profile = require APP_ROOT . '/content/profile.php';
+$social = $profile['social'];
+$siteUrl = rtrim((string) cfg('site_url'), '/');
+$description ??= $profile['seo']['description'];
+$noindex ??= false;
+$isHome = request_path() === '/';
+$canonical = $siteUrl . ($isHome ? '/' : request_path());
+$shareImage = $siteUrl . '/assets/img/share/manu-francis-share.jpg';
 ?>
 <!doctype html>
 <html lang="en">
@@ -13,33 +24,44 @@ $social = (require APP_ROOT . '/content/profile.php')['social'];
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= e($title) ?></title>
   <meta name="description" content="<?= e($description) ?>">
+<?php if ($noindex) : ?>
+  <meta name="robots" content="noindex">
+<?php else : ?>
   <link rel="canonical" href="<?= e($canonical) ?>">
-  <meta property="og:type" content="profile">
+<?php endif; ?>
+  <meta property="og:site_name" content="Manu Francis">
+  <meta property="og:locale" content="en_IN">
+  <meta property="og:type" content="<?= $isHome ? 'profile' : 'website' ?>">
+<?php if ($isHome) : ?>
+  <meta property="profile:first_name" content="Manu">
+  <meta property="profile:last_name" content="Francis">
+  <meta property="profile:username" content="phogerman">
+<?php endif; ?>
   <meta property="og:title" content="<?= e($title) ?>">
   <meta property="og:description" content="<?= e($description) ?>">
   <meta property="og:url" content="<?= e($canonical) ?>">
-  <meta property="og:image" content="<?= e($siteUrl) ?>/assets/img/photos/manu-francis-hero.webp">
+  <meta property="og:image" content="<?= e($shareImage) ?>">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Manu Francis, Founder &amp; Technical Architect">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@phogerman">
+  <meta name="twitter:creator" content="@phogerman">
+  <meta name="twitter:title" content="<?= e($title) ?>">
+  <meta name="twitter:description" content="<?= e($description) ?>">
+  <meta name="twitter:image" content="<?= e($shareImage) ?>">
+  <meta name="twitter:image:alt" content="Manu Francis, Founder &amp; Technical Architect">
   <meta name="theme-color" content="#ffffff">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preload" href="/assets/fonts/inter-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="<?= e(asset('css/site.css')) ?>">
   <script src="<?= e(asset('js/site.js')) ?>" defer></script>
-  <script type="application/ld+json"><?= json_encode([
-      '@context'  => 'https://schema.org',
-      '@type'     => 'Person',
-      'name'      => 'Manu Francis',
-      'url'       => $siteUrl . '/',
-      'image'     => $siteUrl . '/assets/img/photos/manu-francis-headshot.webp',
-      'jobTitle'  => 'Founder & Technical Architect',
-      'worksFor'  => [
-          ['@type' => 'Organization', 'name' => 'Halosec Cyber Defense LLP'],
-          ['@type' => 'Organization', 'name' => 'Phoger Edwhere Learning LLP'],
-      ],
-      'alumniOf'  => ['@type' => 'CollegeOrUniversity', 'name' => 'Cochin University of Science and Technology'],
-      'knowsAbout' => ['Cybersecurity', 'IT Infrastructure', 'Software Engineering', 'Security Operations', 'Ethical Hacking'],
-      'sameAs'    => array_column($social, 'url'),
-  ], JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
+<?php if ($isHome) : ?>
+  <script type="application/ld+json"><?= json_encode(profile_schema($profile, $siteUrl), JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
+<?php endif; ?>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
