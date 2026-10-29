@@ -15,6 +15,16 @@ return [
         'My focus is cybersecurity research, security-conscious project development and end-to-end security implementation. I founded Halosec Cyber Defense LLP and Phoger Edwhere Learning LLP, and I am the technical architect of both.',
     ],
 
+    // All verified as Manu's own accounts (username: phogerman).
+    'social' => [
+        ['key' => 'linkedin',  'label' => 'LinkedIn',  'url' => 'https://www.linkedin.com/in/phogerman/'],
+        ['key' => 'github',    'label' => 'GitHub',    'url' => 'https://github.com/phogerman'],
+        ['key' => 'x',         'label' => 'X',         'url' => 'https://x.com/phogerman'],
+        ['key' => 'instagram', 'label' => 'Instagram', 'url' => 'https://www.instagram.com/phogerman/'],
+        ['key' => 'facebook',  'label' => 'Facebook',  'url' => 'https://www.facebook.com/phogerman'],
+        ['key' => 'youtube',   'label' => 'YouTube',   'url' => 'https://www.youtube.com/@phogerman'],
+    ],
+
     'stats' => [
         ['value' => '10+',  'label' => 'Years in cybersecurity, IT infrastructure & software engineering'],
         ['value' => '40K+', 'label' => 'Students trained, government and non-government'],

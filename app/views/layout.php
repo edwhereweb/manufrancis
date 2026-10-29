@@ -3,6 +3,8 @@
 $siteUrl = rtrim((string) cfg('site_url'), '/');
 $description = 'Manu Francis: Founder & Technical Architect of Halosec Cyber Defense LLP and Phoger Edwhere Learning LLP. 10+ years in cybersecurity, IT infrastructure and software engineering. CEH, CEI, CSA.';
 $canonical = $siteUrl . (request_path() === '/' ? '/' : request_path());
+require_once APP_ROOT . '/views/partials/social.php';
+$social = (require APP_ROOT . '/content/profile.php')['social'];
 ?>
 <!doctype html>
 <html lang="en">
@@ -36,6 +38,7 @@ $canonical = $siteUrl . (request_path() === '/' ? '/' : request_path());
       ],
       'alumniOf'  => ['@type' => 'CollegeOrUniversity', 'name' => 'Cochin University of Science and Technology'],
       'knowsAbout' => ['Cybersecurity', 'IT Infrastructure', 'Software Engineering', 'Security Operations', 'Ethical Hacking'],
+      'sameAs'    => array_column($social, 'url'),
   ], JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
 </head>
 <body>
@@ -62,6 +65,7 @@ $canonical = $siteUrl . (request_path() === '/' ? '/' : request_path());
   <footer class="footer">
     <div class="wrap footer-inner">
       <p>&copy; <?= date('Y') ?> Manu Francis. All rights reserved.</p>
+      <?= social_links($social) ?>
       <p><a href="/privacy">Privacy policy</a> <span aria-hidden="true">&middot;</span> No tracking, no ads, no cookies.</p>
     </div>
   </footer>

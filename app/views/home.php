@@ -1,6 +1,7 @@
 <?php
 /** @var bool $sent @var array $errors @var array $old */
 require_once APP_ROOT . '/views/partials/illustrations.php';
+require_once APP_ROOT . '/views/partials/social.php';
 $p = require APP_ROOT . '/content/profile.php';
 $errors ??= [];
 $old ??= [];
@@ -194,6 +195,8 @@ $aria = fn (string $field) => isset($errors[$field]) ? ' aria-invalid="true" ari
       <p class="eyebrow">Contact</p>
       <h2>Let's build something secure.</h2>
       <p class="body-lg">Security implementation, IT infrastructure, software architecture, training or speaking. Send a short note and I will get back to you.</p>
+      <p class="social-label">Or find me on</p>
+      <?= social_links($p['social'], 'social-lg') ?>
       <p class="muted small">Your details are used only to reply to you, are never shared for marketing, and are deleted automatically after <?= (int) round(cfg('retention_days') / 30) ?> months. Read the <a href="/privacy">privacy policy</a>.</p>
     </div>
 

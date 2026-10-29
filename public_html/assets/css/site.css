@@ -357,3 +357,15 @@ p { margin: 0 0 1em; }
 .codes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 0; margin: 20px 0 28px; list-style: none; }
 .codes code { display: block; padding: 10px 12px; border-radius: 10px; background: var(--bg-alt); font-size: 1.05rem; text-align: center; letter-spacing: .04em; }
 .sub-tight { margin-top: 16px; }
+
+/* Social profile links */
+.social { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0; list-style: none; }
+.social a { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; color: var(--muted); transition: color .2s, background .2s, transform .2s var(--ease); }
+.social a:hover { color: var(--ink); background: var(--bg-alt); transform: translateY(-1px); text-decoration: none; }
+.social-icon { width: 17px; height: 17px; }
+.social-lg { gap: 10px; margin: 6px 0 28px; }
+.social-lg a { width: 46px; height: 46px; background: var(--bg-alt); color: var(--ink); }
+.social-lg a:hover { background: var(--ink); color: #fff; }
+.social-lg .social-icon { width: 19px; height: 19px; }
+.social-label { margin: 28px 0 0; font-weight: 600; color: var(--ink); }
+.footer-inner { align-items: center; }
