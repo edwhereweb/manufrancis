@@ -369,3 +369,34 @@ p { margin: 0 0 1em; }
 .social-lg .social-icon { width: 19px; height: 19px; }
 .social-label { margin: 28px 0 0; font-weight: 600; color: var(--ink); }
 .footer-inner { align-items: center; }
+
+/* Admin: activity log, admins, security */
+.admin-nav a[aria-current] { color: var(--ink); font-weight: 600; }
+.sub-card { margin-top: 20px; }
+.small-head { margin-bottom: 8px; }
+.small-head h2 { margin: 0; }
+.mini-log { list-style: none; padding: 0; margin: 0; }
+.mini-log li { display: flex; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); line-height: 1.4; }
+.mini-log li:first-child { border-top: 0; }
+.dot-tone { display: inline-block; flex: none; width: 8px; height: 8px; margin: 7px 8px 0 0; border-radius: 50%; background: var(--muted); vertical-align: top; }
+.mini-log .dot-tone { margin-right: 0; }
+.tone-ok { background: var(--mint); }
+.tone-warn { background: var(--amber); }
+.tone-bad { background: var(--danger); }
+.tone-info { background: var(--blue); }
+.log td { font-size: .9rem; }
+.nowrap { white-space: nowrap; }
+.filter-fail { margin-left: auto; }
+.pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; }
+.pager-links { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.page-link, .page-current { display: grid; place-items: center; min-width: 36px; height: 36px; padding: 0 8px; border-radius: 10px; font-size: .9rem; }
+.page-link { color: var(--text); }
+.page-link:hover { background: var(--bg-alt); text-decoration: none; }
+.page-current { background: var(--ink); color: #fff; font-weight: 600; }
+.actions summary { cursor: pointer; color: var(--blue); font-weight: 600; font-size: .9rem; }
+.actions[open] { min-width: 260px; }
+.actions .form { margin-top: 10px; }
+.actions .form input.otp { font-size: 1.1rem; max-width: none; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.created { margin-bottom: 20px; border-color: #b7ebd5; background: var(--mint-soft); }
+.narrow-left { max-width: 640px; }

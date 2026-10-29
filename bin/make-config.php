@@ -29,6 +29,7 @@ $config = [
     'app_key'             => getenv('APP_KEY'),
     'admin_user'          => getenv('ADMIN_USER'),
     'admin_password_hash' => getenv('ADMIN_PASSWORD_HASH'),
+    'admin_email'         => getenv('ADMIN_EMAIL') ?: '',
     'db_driver'           => 'mysql',
     'db_host'             => getenv('DB_HOST') ?: 'localhost',
     'db_name'             => getenv('DB_NAME'),

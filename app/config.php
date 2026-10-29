@@ -12,6 +12,9 @@ $defaults = [
     'app_key'             => '',                   // 32+ random chars; signs form tokens and hashes IPs
     'admin_user'          => '',
     'admin_password_hash' => '',                   // php bin/hash-password.php
+    'admin_email'         => '',                   // first admin's email, for password reset links
+    // admin_user / admin_password_hash / admin_email only create the FIRST admin when the
+    // `admins` table is empty. After that, accounts and passwords live in the database.
     'notify_email'        => '',                   // where new-lead alerts go; empty = no email
     'mail_from'           => '',                   // e.g. no-reply@manufrancis.com (must be on your domain)
     'privacy_email'       => '',                   // shown on the privacy page; empty = use the contact form

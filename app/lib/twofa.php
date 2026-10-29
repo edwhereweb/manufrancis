@@ -179,7 +179,7 @@ function twofa_use_recovery_code(string $user, string $input, array $row): bool
             unset($hashes[$i]);
             db()->prepare('UPDATE admin_2fa SET recovery_json = ? WHERE username = ?')
                 ->execute([json_encode(array_values($hashes)), $user]);
-            error_log("Admin {$user} signed in with a recovery code; " . count($hashes) . ' left');
+            audit('security', 'recovery_code_used', $user, count($hashes) . ' recovery codes left');
 
             return true;
         }

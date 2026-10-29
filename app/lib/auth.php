@@ -54,7 +54,9 @@ function admin_logged_in(): bool
         && !empty($s['mfa'])
         && ($s['last_seen'] ?? 0) > time() - ADMIN_IDLE_TIMEOUT
         && ($s['since'] ?? 0) > time() - ADMIN_ABSOLUTE_TIMEOUT
-        && hash_equals((string) ($s['ua'] ?? ''), ua_hash());
+        && hash_equals((string) ($s['ua'] ?? ''), ua_hash())
+        // A password change elsewhere ends this session.
+        && hash_equals(admin_password_version((string) $s['admin']), (string) ($s['pwv'] ?? ''));
     if ($ok) {
         $_SESSION['last_seen'] = time();
     }
@@ -66,6 +68,11 @@ function require_admin(): void
 {
     if (!admin_logged_in()) {
         redirect('/admin/login');
+    }
+    // New accounts start with a temporary password: nothing else until it is changed.
+    $a = admin_find_active((string) $_SESSION['admin']);
+    if ($a && (int) $a['must_change'] === 1 && !in_array(request_path(), ['/admin/security', '/admin/recovery-codes'], true)) {
+        redirect('/admin/security?must=1');
     }
 }
 
@@ -90,21 +97,17 @@ function admin_password_step(string $user, string $password): ?string
 {
     $bucket = 'login:' . ip_hash();
     if (throttle_count($bucket, LOGIN_WINDOW) >= LOGIN_MAX_FAILS) {
+        audit('signin', 'password_locked', $user);
         return 'Too many attempts. Try again in 15 minutes.';
     }
 
-    $hash = (string) cfg('admin_password_hash');
-    $userOk = cfg('admin_user') !== '' && hash_equals((string) cfg('admin_user'), $user);
-    // Always run password_verify so timing does not reveal whether the username exists.
-    // The fallback is a hash of a random, discarded string, so it never matches.
-    $passOk = password_verify($password, $hash ?: '$2y$10$UkBopR7SgE6RYA/VCK/wB.2fP4bzarKbbEz.yIxwK9pzU4PPODkZy');
-
-    if (!$userOk || !$passOk) {
+    if (!admin_password_ok($user, $password)) {
         throttle_hit($bucket);
-        error_log('Admin login: wrong username or password from ' . substr(ip_hash(), 0, 12));
+        audit('signin', 'password_fail', $user, admin_find_active($user) ? 'wrong password' : 'unknown or disabled username');
         return 'Wrong username or password.';
     }
 
+    audit('signin', 'password_ok', $user);
     admin_session_start();
     session_regenerate_id(true);
     $_SESSION = ['pending' => ['user' => $user, 'at' => time(), 'ua' => ua_hash()], 'csrf' => bin2hex(random_bytes(32))];
@@ -125,12 +128,13 @@ function admin_code_step(string $code): ?string
     }
     $bucket = 'otp:' . $user;
     if (throttle_count($bucket, LOGIN_WINDOW) >= OTP_MAX_FAILS) {
+        audit('signin', 'code_locked', $user);
         admin_logout();
         return 'Too many wrong codes. Sign-in is locked for 15 minutes.';
     }
     if (!twofa_verify($user, $code)) {
         throttle_hit($bucket);
-        error_log("Admin login: wrong 2FA code for {$user}");
+        audit('signin', 'code_fail', $user);
         return 'That code is not valid. Check the time on your phone and try the newest code.';
     }
 
@@ -152,8 +156,18 @@ function admin_complete_login(string $user): void
         'since'     => time(),
         'last_seen' => time(),
         'ua'        => ua_hash(),
+        'pwv'       => admin_password_version($user),
     ];
-    error_log("Admin login: {$user} signed in");
+    audit('signin', 'signin_ok', $user);
+    audit_purge();
+}
+
+/** After the password changes in this session: keep this session, end all others. */
+function admin_refresh_session(string $user): void
+{
+    session_regenerate_id(true);
+    $_SESSION['pwv'] = admin_password_version($user);
+    $_SESSION['csrf'] = bin2hex(random_bytes(32));
 }
 
 function admin_logout(): void
@@ -162,6 +176,16 @@ function admin_logout(): void
     $_SESSION = [];
     session_destroy();
     setcookie(session_name(), '', ['expires' => 1, 'path' => '/admin', 'secure' => is_https(), 'httponly' => true, 'samesite' => 'Strict']);
+}
+
+/** Friendly message on the sign-in page after sign-out or a password reset. */
+function login_notice(): ?string
+{
+    return match (true) {
+        isset($_GET['reset'])      => 'Your password has been reset. Sign in with the new one.',
+        isset($_GET['signed_out']) => 'You have signed out.',
+        default                    => null,
+    };
 }
 
 function admin_csrf(): string

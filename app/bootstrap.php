@@ -16,6 +16,8 @@ require APP_ROOT . '/lib/http.php';
 require APP_ROOT . '/lib/security.php';
 require APP_ROOT . '/lib/db.php';
 require APP_ROOT . '/lib/leads.php';
+require APP_ROOT . '/lib/audit.php';
+require APP_ROOT . '/lib/admin_account.php';
 require APP_ROOT . '/lib/auth.php';
 
 $isLocal = cfg('env') === 'local';

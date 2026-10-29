@@ -49,7 +49,7 @@ function db_now(int $offsetSeconds = 0): string
     return date('Y-m-d H:i:s', time() + $offsetSeconds);
 }
 
-const SCHEMA_VERSION = 2;
+const SCHEMA_VERSION = 3;
 
 /** Create tables once per schema version. A marker file avoids running DDL on every request. */
 function db_migrate(PDO $pdo): void
@@ -97,8 +97,49 @@ function db_migrate(PDO $pdo): void
         created_at    {$time} NOT NULL
     ){$engine}");
 
+    // Admin accounts. The first one is created from ADMIN_USER / ADMIN_PASSWORD_HASH when the table is empty.
+    $pdo->exec("CREATE TABLE IF NOT EXISTS admins (
+        id                  {$id},
+        username            VARCHAR(100) NOT NULL UNIQUE,
+        email               VARCHAR(190) NOT NULL DEFAULT '',
+        password_hash       VARCHAR(255) NOT NULL,
+        password_changed_at {$time} NOT NULL,
+        must_change         SMALLINT NOT NULL DEFAULT 0,
+        is_active           SMALLINT NOT NULL DEFAULT 1,
+        created_at          {$time} NOT NULL,
+        created_by          VARCHAR(100) NOT NULL DEFAULT ''
+    ){$engine}");
+
+    // Single-use password reset tokens. Only a SHA-256 of the token is stored.
+    $pdo->exec("CREATE TABLE IF NOT EXISTS password_resets (
+        token_hash CHAR(64) NOT NULL PRIMARY KEY,
+        username   VARCHAR(100) NOT NULL,
+        created_at {$time} NOT NULL,
+        expires_at {$time} NOT NULL,
+        used_at    {$time} NULL
+    ){$engine}");
+
+    // Admin sign-in activity, security events and data access (audit trail).
+    $pdo->exec("CREATE TABLE IF NOT EXISTS security_log (
+        id         {$id},
+        at         {$time} NOT NULL,
+        category   VARCHAR(20)  NOT NULL,
+        event      VARCHAR(40)  NOT NULL,
+        username   VARCHAR(100) NOT NULL DEFAULT '',
+        ip         VARCHAR(45)  NOT NULL DEFAULT '',
+        forwarded  VARCHAR(100) NOT NULL DEFAULT '',
+        user_agent VARCHAR(255) NOT NULL DEFAULT '',
+        detail     VARCHAR(255) NOT NULL DEFAULT ''
+    ){$engine}");
+
     // Index creation is not idempotent in MySQL, so ignore "already exists".
-    foreach (['CREATE INDEX leads_created ON leads (created_at)', 'CREATE INDEX leads_status ON leads (status)', 'CREATE INDEX throttle_bucket ON throttle (bucket, at)'] as $sql) {
+    foreach ([
+        'CREATE INDEX leads_created ON leads (created_at)',
+        'CREATE INDEX leads_status ON leads (status)',
+        'CREATE INDEX throttle_bucket ON throttle (bucket, at)',
+        'CREATE INDEX security_log_at ON security_log (at)',
+        'CREATE INDEX security_log_cat ON security_log (category, at)',
+    ] as $sql) {
         try {
             $pdo->exec($sql);
         } catch (PDOException) {

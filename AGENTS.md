@@ -78,6 +78,9 @@ Calm, product-style layout: white and `#f5f5f7` sections, one dark band each for
 - Sign-in is password, then TOTP. Never set `$_SESSION['admin']` anywhere except `admin_complete_login()`.
 - New admin pages go after `require_admin()` in `app/handlers/admin.php` and must call `admin_csrf_check()` on POST.
 - The TOTP secret is only stored encrypted (`twofa_encrypt`). Never log codes, secrets or recovery codes.
+- Admin accounts and passwords live in the `admins` table (`app/lib/admin_account.php`). Config secrets only seed the first admin.
+- Record anything security-relevant with `audit(category, event, user, detail)` (`app/lib/audit.php`) and add the event's label to `AUDIT_EVENTS`. Categories: `signin`, `security`, `data`.
+- Sensitive admin actions (account changes, password change, recovery codes) need a fresh authenticator code.
 
 ## Deploy
 

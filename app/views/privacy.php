@@ -28,19 +28,20 @@ $contact = filter_var($privacyEmail, FILTER_VALIDATE_EMAIL)
         <tr><td>Name, email, optional phone and organisation, topic and message</td><td>To read and reply to your enquiry and to follow up on it</td><td>Your consent (6(1)(a)) and steps you ask for before a possible contract (6(1)(b))</td></tr>
         <tr><td>Date and time you gave consent, and the consent wording you saw</td><td>To be able to show that consent was given</td><td>Legal obligation to demonstrate consent (6(1)(c), Art. 7(1))</td></tr>
         <tr><td>A one-way keyed hash of your IP address (the IP itself is never stored)</td><td>To limit abuse and spam of the form; kept for at most 24 hours</td><td>Legitimate interest in keeping the site secure (6(1)(f))</td></tr>
+        <tr><td>Only if someone tries to sign in to the private admin area: IP address, browser and the time of each attempt</td><td>To detect and block unauthorised access; kept for 90 days</td><td>Legitimate interest in keeping the site secure (6(1)(f))</td></tr>
         <tr><td>Standard web server logs kept by the hosting provider</td><td>Security and running the service</td><td>Legitimate interest (6(1)(f))</td></tr>
       </tbody>
     </table>
     <p>You do not have to give any data. Without name, email and message I cannot reply, so the form will not send without them.</p>
 
     <h2>How long data is kept</h2>
-    <p>Enquiries are deleted automatically <?= $months ?> months after they are received, or earlier if you ask. Abuse-protection records are deleted within 24 hours.</p>
+    <p>Enquiries are deleted automatically <?= $months ?> months after they are received, or earlier if you ask. Abuse-protection records are deleted within 24 hours. Admin sign-in and security records are deleted after 90 days.</p>
 
     <h2>Who receives it</h2>
     <p>Your data is never sold or shared for marketing. It is stored on servers of the website's hosting provider (Hostinger), which acts as a data processor under a data processing agreement. A copy of new enquiries is sent by email to Manu Francis so they can be answered. Data may be processed in India and in the countries where the hosting provider operates; where data leaves the EU/EEA, the provider's standard contractual clauses apply.</p>
 
     <h2>How it is protected</h2>
-    <p>The site is served only over HTTPS. Enquiries are kept in a private database at the hosting provider that is not reachable from the web. Only Manu Francis can open them, through an admin area protected by a password, two-step verification and login limits.</p>
+    <p>The site is served only over HTTPS. Enquiries are kept in a private database at the hosting provider that is not reachable from the web. Only Manu Francis and admins he authorises can open them, through an admin area protected by a password, two-step verification and login limits. Every sign-in, export and deletion is recorded.</p>
 
     <h2>Your rights</h2>
     <p>Under the GDPR (and India's Digital Personal Data Protection Act, 2023), you can:</p>

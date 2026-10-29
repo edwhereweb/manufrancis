@@ -12,7 +12,7 @@ declare(strict_types=1);
 $tmp = sys_get_temp_dir() . '/mf-test-' . bin2hex(random_bytes(4));
 mkdir($tmp);
 $mysql = (string) getenv('TEST_DB_NAME') !== '';
-$config = ['env' => 'local', 'app_key' => str_repeat('k', 40), 'storage_path' => $tmp, 'retention_days' => 30, 'admin_user' => 'admin']
+$config = ['env' => 'local', 'app_key' => str_repeat('k', 40), 'storage_path' => $tmp, 'retention_days' => 30, 'admin_user' => 'admin', 'admin_password_hash' => password_hash('first-admin-pass-123', PASSWORD_DEFAULT), 'admin_email' => 'admin@example.test']
     + ($mysql
         ? ['db_driver' => 'mysql', 'db_host' => getenv('TEST_DB_HOST') ?: '127.0.0.1', 'db_port' => (int) (getenv('TEST_DB_PORT') ?: 3306),
            'db_name' => getenv('TEST_DB_NAME'), 'db_user' => getenv('TEST_DB_USER'), 'db_pass' => getenv('TEST_DB_PASS')]
@@ -27,7 +27,7 @@ echo 'Database: ' . ($mysql ? 'MySQL' : 'SQLite') . PHP_EOL;
 if ($mysql) {
     // Start clean: drop tables, then let db() recreate them.
     $raw = new PDO(sprintf('mysql:host=%s;port=%d;dbname=%s', $config['db_host'], $config['db_port'], $config['db_name']), $config['db_user'], $config['db_pass']);
-    $raw->exec('DROP TABLE IF EXISTS leads, throttle, admin_2fa');
+    $raw->exec('DROP TABLE IF EXISTS leads, throttle, admin_2fa, admins, password_resets, security_log');
 }
 
 $failed = 0;
@@ -117,6 +117,73 @@ check('same code cannot be replayed', !twofa_verify('admin', $live));
 check('recovery code works', twofa_verify('admin', strtoupper($codes[3])));
 check('recovery code is single-use', !twofa_verify('admin', $codes[3]) && twofa_recovery_left('admin') === 9);
 check('unknown user fails', !twofa_verify('nobody', $totp->at(time())));
+
+echo "Admin accounts\n";
+check('first admin is created from config', admin_find('admin') !== null && admin_find('admin')['email'] === 'admin@example.test');
+admins_seed();
+check('seeding does not duplicate', count(admins_all()) === 1);
+check('right password accepted', admin_password_ok('admin', 'first-admin-pass-123'));
+check('wrong password rejected', !admin_password_ok('admin', 'nope'));
+check('unknown user rejected', !admin_password_ok('ghost', 'first-admin-pass-123'));
+check('short password refused', password_problem('admin', 'short', 'short') !== null);
+check('mismatch refused', password_problem('admin', 'long-enough-phrase-1', 'long-enough-phrase-2') !== null);
+check('username inside password refused', password_problem('admin', 'my-admin-is-great-1', 'my-admin-is-great-1') !== null);
+check('repetitive password refused', password_problem('admin', 'aaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaa') !== null);
+check('current password refused', password_problem('admin', 'first-admin-pass-123', 'first-admin-pass-123') !== null);
+check('good password accepted', password_problem('admin', 'violet tiger orbit quartz', 'violet tiger orbit quartz') === null);
+$v1 = admin_password_version('admin');
+sleep(1);
+admin_set_password('admin', 'violet tiger orbit quartz');
+check('password change works', admin_password_ok('admin', 'violet tiger orbit quartz') && !admin_password_ok('admin', 'first-admin-pass-123'));
+check('password change bumps session version', admin_password_version('admin') !== $v1);
+
+check('bad username refused', admin_create('Bad Name', 'x@example.test', 'temp', 'admin') !== null);
+check('bad email refused', admin_create('second', 'not-an-email', 'temp', 'admin') !== null);
+$temp = temporary_password();
+check('temporary password is long', strlen($temp) >= 20);
+check('new admin created', admin_create('second', 'Second@Example.test', $temp, 'admin') === null);
+check('duplicate username refused', admin_create('second', 'x@example.test', 'temp', 'admin') !== null);
+check('new admin must change password', (int) admin_find('second')['must_change'] === 1 && admin_password_ok('second', $temp));
+check('email is lower-cased', admin_find('second')['email'] === 'second@example.test');
+check('cannot disable yourself', admin_set_active('admin', false, 'admin') !== null);
+check('can disable another admin', admin_set_active('second', false, 'admin') === null && !admin_password_ok('second', $temp));
+check('disabled admin has no session version', admin_password_version('second') === 'disabled');
+check('cannot disable last active admin', admin_set_active('admin', false, 'second') !== null);
+admin_set_active('second', true, 'admin');
+
+echo "Password reset\n";
+$token = bin2hex(random_bytes(32));
+db()->prepare('INSERT INTO password_resets (token_hash, username, created_at, expires_at) VALUES (?, ?, ?, ?)')
+    ->execute([hash('sha256', $token), 'admin', db_now(), db_now(RESET_TTL)]);
+check('valid token finds admin', reset_user($token) === 'admin');
+check('malformed token rejected', reset_user('xyz') === null && reset_user(str_repeat('0', 64)) === null);
+check('token consumed once', reset_consume($token) && !reset_consume($token));
+check('used token rejected', reset_user($token) === null);
+$old = bin2hex(random_bytes(32));
+db()->prepare('INSERT INTO password_resets (token_hash, username, created_at, expires_at) VALUES (?, ?, ?, ?)')
+    ->execute([hash('sha256', $old), 'admin', db_now(-3600), db_now(-1800)]);
+check('expired token rejected', reset_user($old) === null);
+reset_request('ghost');
+check('unknown user reset is only logged', (int) db()->query("SELECT COUNT(*) FROM password_resets WHERE username = 'ghost'")->fetchColumn() === 0);
+
+echo "Audit log\n";
+db()->exec('DELETE FROM security_log');
+for ($i = 0; $i < 30; $i++) {
+    audit('signin', $i % 3 === 0 ? 'password_fail' : 'signin_ok', 'admin');
+}
+audit('data', 'lead_exported', 'admin', '3 leads');
+$counts = audit_counts();
+check('counts by category', $counts['all'] === 31 && $counts['signin'] === 30 && $counts['data'] === 1);
+$p1 = audit_page('', 1);
+check('page 1 has 25 rows of 2 pages', count($p1['rows']) === 25 && $p1['pages'] === 2 && $p1['total'] === 31);
+check('page 2 has the rest', count(audit_page('', 2)['rows']) === 6);
+check('out-of-range page is clamped', audit_page('', 99)['page'] === 2);
+check('category filter', audit_page('data', 1)['total'] === 1);
+check('failures filter', audit_page('', 1, true)['total'] === 10);
+db()->prepare('UPDATE security_log SET at = ? WHERE event = ?')->execute([db_now(-86400 * 100), 'lead_exported']);
+audit_purge();
+check('entries older than 90 days purged', audit_counts()['data'] === 0);
+check('device names are readable', ua_short('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/140 Safari/537.36') === 'Chrome on Windows');
 
 echo $failed ? "\n{$failed} failed\n" : "\nAll passed\n";
 exit($failed ? 1 : 0);

@@ -16,8 +16,11 @@
       <a class="brand" href="/admin/leads"><span class="brand-mark" aria-hidden="true">MF</span> Leads</a>
       <?php if (admin_logged_in()) : ?>
         <div class="admin-nav">
-          <a href="/admin/leads">Leads</a>
-          <a href="/admin/security">Security</a>
+          <?php $here = request_path(); ?>
+          <a href="/admin/leads"<?= str_starts_with($here, '/admin/leads') ? ' aria-current="page"' : '' ?>>Leads</a>
+          <a href="/admin/activity"<?= $here === '/admin/activity' ? ' aria-current="page"' : '' ?>>Activity</a>
+          <a href="/admin/admins"<?= $here === '/admin/admins' ? ' aria-current="page"' : '' ?>>Admins</a>
+          <a href="/admin/security"<?= $here === '/admin/security' ? ' aria-current="page"' : '' ?>>Security</a>
           <form method="post" action="/admin/logout">
             <input type="hidden" name="csrf" value="<?= e(admin_csrf()) ?>">
             <button class="btn btn-sm btn-ghost" type="submit">Sign out</button>
