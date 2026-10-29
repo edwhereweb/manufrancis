@@ -27,6 +27,16 @@ Keep it boring: no framework, no Composer, no npm, no build step. Hostinger shar
 | `bin/` | CLI helpers (not deployed). |
 | `tests/run.php` | Dependency-free test runner. |
 
+## Design
+
+Calm, product-style layout: white and `#f5f5f7` sections, one dark band each for Recognition and Training, big tight headings, rounded tiles.
+
+- **Tokens** are at the top of `site.css` (`--ink`, `--muted`, `--blue`, `--mint`, `--violet`, `--amber`, radii, shadows). Use them; do not add one-off colours.
+- **Font**: Inter variable, self-hosted in `public_html/assets/fonts/` (OFL licence alongside). Never load fonts from Google.
+- **Illustrations**: inline SVGs in `app/views/partials/illustrations.php`, called with `illo('shield')` etc. They colour themselves from the tile's `--c/--c2/--c3` (set by `.tone-*`) and animate with CSS classes (`spin`, `pulse`, `scan`, `flow`, `blink`, `float`). No `style=""` (CSP).
+- **Motion**: add `reveal` (+ `d1`/`d2` for stagger) to fade a block in on scroll; `data-count` on a stat counts it up. All motion is off under `prefers-reduced-motion`.
+- **Photos**: 1200px wide `.webp`, real event photos only, no stamped/overlaid images. Gallery tiles take `size` `wide` or `normal` in `profile.php`.
+
 ## Naming
 
 - Files and folders: lowercase kebab-case (`hash-password.php`, `manu-francis-hero.webp`).

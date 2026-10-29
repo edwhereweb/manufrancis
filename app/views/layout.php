@@ -18,8 +18,9 @@ $canonical = $siteUrl . (request_path() === '/' ? '/' : request_path());
   <meta property="og:url" content="<?= e($canonical) ?>">
   <meta property="og:image" content="<?= e($siteUrl) ?>/assets/img/photos/manu-francis-hero.webp">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#0a1020">
+  <meta name="theme-color" content="#ffffff">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/inter-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="<?= e(asset('css/site.css')) ?>">
   <script src="<?= e(asset('js/site.js')) ?>" defer></script>
   <script type="application/ld+json"><?= json_encode([
@@ -45,8 +46,9 @@ $canonical = $siteUrl . (request_path() === '/' ? '/' : request_path());
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
       <nav id="nav-links" class="nav-links" aria-label="Main">
         <a href="/#about">About</a>
+        <a href="/#work">Expertise</a>
         <a href="/#ventures">Ventures</a>
-        <a href="/#work">Work</a>
+        <a href="/#training">Training</a>
         <a href="/#credentials">Credentials</a>
         <a class="btn btn-sm btn-accent" href="/#contact">Get in touch</a>
       </nav>
@@ -60,7 +62,7 @@ $canonical = $siteUrl . (request_path() === '/' ? '/' : request_path());
   <footer class="footer">
     <div class="wrap footer-inner">
       <p>&copy; <?= date('Y') ?> Manu Francis. All rights reserved.</p>
-      <p><a href="/privacy">Privacy policy</a> &middot; No tracking, no ads, no cookies for visitors.</p>
+      <p><a href="/privacy">Privacy policy</a> <span aria-hidden="true">&middot;</span> No tracking, no ads, no cookies.</p>
     </div>
   </footer>
 </body>
