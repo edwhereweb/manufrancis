@@ -40,7 +40,7 @@ $contact = filter_var($privacyEmail, FILTER_VALIDATE_EMAIL)
     <p>Your data is never sold or shared for marketing. It is stored on servers of the website's hosting provider (Hostinger), which acts as a data processor under a data processing agreement. A copy of new enquiries is sent by email to Manu Francis so they can be answered. Data may be processed in India and in the countries where the hosting provider operates; where data leaves the EU/EEA, the provider's standard contractual clauses apply.</p>
 
     <h2>How it is protected</h2>
-    <p>The site is served only over HTTPS. Enquiries are kept in a database outside the public web folder. Only Manu Francis can open them, through a password-protected admin area with login limits.</p>
+    <p>The site is served only over HTTPS. Enquiries are kept in a private database at the hosting provider that is not reachable from the web. Only Manu Francis can open them, through an admin area protected by a password, two-step verification and login limits.</p>
 
     <h2>Your rights</h2>
     <p>Under the GDPR (and India's Digital Personal Data Protection Act, 2023), you can:</p>

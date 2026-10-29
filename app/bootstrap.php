@@ -4,6 +4,14 @@ declare(strict_types=1);
 
 define('APP_ROOT', __DIR__);
 
+// Composer libraries (TOTP, QR codes). CI runs `composer install`; vendor/ is deployed, not committed.
+$autoload = dirname(__DIR__) . '/vendor/autoload.php';
+if (!is_file($autoload)) {
+    http_response_code(503);
+    exit('Dependencies missing: run composer install.');
+}
+require $autoload;
+
 require APP_ROOT . '/lib/http.php';
 require APP_ROOT . '/lib/security.php';
 require APP_ROOT . '/lib/db.php';

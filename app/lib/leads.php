@@ -58,10 +58,10 @@ function lead_validate(array $in): array
 
 function lead_create(array $d): int
 {
-    $now = date('c');
-    db()->prepare('INSERT INTO leads (created_at, updated_at, name, email, phone, organisation, interest, message, consent_at, consent_text)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-        ->execute([$now, $now, $d['name'], $d['email'], $d['phone'], $d['organisation'], $d['interest'], $d['message'], $now, CONSENT_TEXT]);
+    $now = db_now();
+    db()->prepare('INSERT INTO leads (created_at, updated_at, name, email, phone, organisation, interest, message, notes, consent_at, consent_text)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+        ->execute([$now, $now, $d['name'], $d['email'], $d['phone'], $d['organisation'], $d['interest'], $d['message'], '', $now, CONSENT_TEXT]);
 
     return (int) db()->lastInsertId();
 }
@@ -76,8 +76,9 @@ function leads_list(string $status = '', string $search = ''): array
         $args[] = $status;
     }
     if ($search !== '') {
-        $sql .= " AND (name LIKE ? ESCAPE '\\' OR email LIKE ? ESCAPE '\\' OR organisation LIKE ? ESCAPE '\\' OR message LIKE ? ESCAPE '\\')";
-        $like = '%' . addcslashes($search, '%_\\') . '%';
+        // '!' as the LIKE escape character behaves the same in MySQL and SQLite (backslash does not).
+        $sql .= " AND (name LIKE ? ESCAPE '!' OR email LIKE ? ESCAPE '!' OR organisation LIKE ? ESCAPE '!' OR message LIKE ? ESCAPE '!')";
+        $like = '%' . str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $search) . '%';
         array_push($args, $like, $like, $like, $like);
     }
     $st = db()->prepare($sql . ' ORDER BY created_at DESC LIMIT 500');
@@ -111,7 +112,7 @@ function lead_update(int $id, string $status, string $notes): void
         return;
     }
     db()->prepare('UPDATE leads SET status = ?, notes = ?, updated_at = ? WHERE id = ?')
-        ->execute([$status, mb_substr($notes, 0, 10000), date('c'), $id]);
+        ->execute([$status, mb_substr($notes, 0, 10000), db_now(), $id]);
 }
 
 /** Permanent erasure (GDPR Art. 17). */
@@ -123,7 +124,7 @@ function lead_delete(int $id): void
 /** Storage limitation (GDPR Art. 5(1)(e)): drop leads older than the retention period. */
 function leads_purge_old(): int
 {
-    $cutoff = date('c', time() - 86400 * (int) cfg('retention_days'));
+    $cutoff = db_now(-86400 * (int) cfg('retention_days'));
     $st = db()->prepare('DELETE FROM leads WHERE created_at < ?');
     $st->execute([$cutoff]);
 

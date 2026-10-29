@@ -15,10 +15,14 @@
     <div class="wrap nav-inner">
       <a class="brand" href="/admin/leads"><span class="brand-mark" aria-hidden="true">MF</span> Leads</a>
       <?php if (admin_logged_in()) : ?>
-        <form method="post" action="/admin/logout">
-          <input type="hidden" name="csrf" value="<?= e(admin_csrf()) ?>">
-          <button class="btn btn-sm btn-ghost" type="submit">Sign out</button>
-        </form>
+        <div class="admin-nav">
+          <a href="/admin/leads">Leads</a>
+          <a href="/admin/security">Security</a>
+          <form method="post" action="/admin/logout">
+            <input type="hidden" name="csrf" value="<?= e(admin_csrf()) ?>">
+            <button class="btn btn-sm btn-ghost" type="submit">Sign out</button>
+          </form>
+        </div>
       <?php endif; ?>
     </div>
   </header>

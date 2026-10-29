@@ -7,7 +7,7 @@ declare(strict_types=1);
  * Usage: php bin/make-config.php > app/config.local.php
  */
 
-$required = ['APP_KEY', 'ADMIN_USER', 'ADMIN_PASSWORD_HASH'];
+$required = ['APP_KEY', 'ADMIN_USER', 'ADMIN_PASSWORD_HASH', 'DB_NAME', 'DB_USER', 'DB_PASSWORD'];
 foreach ($required as $name) {
     if ((string) getenv($name) === '') {
         fwrite(STDERR, "Missing required secret: {$name}\n");
@@ -29,6 +29,11 @@ $config = [
     'app_key'             => getenv('APP_KEY'),
     'admin_user'          => getenv('ADMIN_USER'),
     'admin_password_hash' => getenv('ADMIN_PASSWORD_HASH'),
+    'db_driver'           => 'mysql',
+    'db_host'             => getenv('DB_HOST') ?: 'localhost',
+    'db_name'             => getenv('DB_NAME'),
+    'db_user'             => getenv('DB_USER'),
+    'db_pass'             => getenv('DB_PASSWORD'),
     'notify_email'        => getenv('NOTIFY_EMAIL') ?: '',
     'mail_from'           => getenv('MAIL_FROM') ?: '',
     'privacy_email'       => getenv('PRIVACY_EMAIL') ?: '',

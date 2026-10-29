@@ -13,3 +13,6 @@ Thumbs.db
 
 # Local tooling
 .claude/
+
+# Composer (installed in CI and deployed)
+/vendor/

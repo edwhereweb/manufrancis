@@ -1,0 +1,21 @@
+{
+    "name": "edwhereweb/manufrancis",
+    "description": "manufrancis.com profile site with lead management",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.2",
+        "ext-pdo": "*",
+        "ext-mbstring": "*",
+        "ext-sodium": "*",
+        "spomky-labs/otphp": "^11.3",
+        "chillerlan/php-qrcode": "^6.0"
+    },
+    "config": {
+        "platform": {
+            "php": "8.2.0"
+        },
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}

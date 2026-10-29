@@ -246,7 +246,6 @@ p { margin: 0 0 1em; }
 .notice { text-align: center; padding: 56px 32px; }
 .ok-big { display: inline-grid; place-items: center; width: 64px; height: 64px; margin-bottom: 16px; border-radius: 50%; background: var(--mint); color: #fff; font-size: 1.8rem; }
 .narrow { max-width: 420px; margin: 40px auto; }
-.narrow h1 { font-size: 2rem; letter-spacing: -.03em; }
 .danger { margin-top: 20px; border-color: #f4c7c3; }
 
 /* Prose */
@@ -340,3 +339,23 @@ p { margin: 0 0 1em; }
 .details dd { margin: 0; overflow-wrap: anywhere; }
 .message { overflow-wrap: anywhere; background: var(--bg-alt); padding: 16px; border-radius: 12px; }
 .admin .form .row label input, .admin .form select, .admin .form textarea { background: #fff; }
+
+/* Admin: sign-in and two-step verification */
+.admin-nav { display: flex; align-items: center; gap: 20px; font-size: .92rem; }
+.admin-nav a { color: #3a3a40; }
+.narrow h1, .setup h1 { font-size: 2rem; letter-spacing: -.03em; }
+.setup { max-width: 640px; margin: 24px auto; }
+.steps { list-style: none; counter-reset: step; padding: 0; margin: 28px 0; }
+.steps > li { counter-increment: step; position: relative; padding: 0 0 26px 48px; }
+.steps > li::before { content: counter(step); position: absolute; left: 0; top: -2px; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: #fff; font-size: .85rem; font-weight: 700; }
+.steps h2, .h-card { font-size: 1.1rem; letter-spacing: -.01em; margin-bottom: 6px; }
+.qr-row { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; margin-top: 10px; }
+.qr { width: 220px; height: 220px; padding: 10px; border: 1px solid var(--line); border-radius: 16px; background: #fff; image-rendering: pixelated; }
+.secret code { display: inline-block; padding: 10px 12px; border-radius: 10px; background: var(--bg-alt); font-size: 1rem; letter-spacing: .06em; word-break: break-all; }
+.form .inline { display: flex; gap: 10px; align-items: stretch; }
+.form .inline .otp { margin-top: 0; }
+.form input.otp { font-size: 1.4rem; letter-spacing: .3em; font-variant-numeric: tabular-nums; text-align: center; max-width: 220px; }
+.narrow .form input.otp, .narrow input.otp { max-width: none; }
+.codes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 0; margin: 20px 0 28px; list-style: none; }
+.codes code { display: block; padding: 10px 12px; border-radius: 10px; background: var(--bg-alt); font-size: 1.05rem; text-align: center; letter-spacing: .04em; }
+.sub-tight { margin-top: 16px; }

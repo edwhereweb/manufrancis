@@ -16,16 +16,39 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: ci-root
+          MYSQL_DATABASE: mf_test
+          MYSQL_USER: mf
+          MYSQL_PASSWORD: ci-pass
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pci-root"
+          --health-interval=5s --health-timeout=5s --health-retries=20
     steps:
       - uses: actions/checkout@v5
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          extensions: pdo_sqlite, mbstring
+          extensions: pdo_sqlite, pdo_mysql, mbstring, sodium
           coverage: none
+          tools: composer:v2
+      - run: composer validate --strict
+      - run: composer install --no-dev --no-interaction --prefer-dist
+      - run: composer audit
       - name: Lint
         run: find app public_html bin tests -name '*.php' -print0 | xargs -0 -n1 php -l
-      - name: Tests
+      - name: Tests (SQLite)
+        run: php tests/run.php
+      - name: Tests (MySQL 8.4)
+        env:
+          TEST_DB_HOST: 127.0.0.1
+          TEST_DB_NAME: mf_test
+          TEST_DB_USER: mf
+          TEST_DB_PASS: ci-pass
         run: php tests/run.php
 
   deploy:
@@ -37,8 +60,13 @@ jobs:
       - uses: actions/checkout@v5
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.2'
+          extensions: mbstring, sodium
           coverage: none
+          tools: composer:v2
+
+      - name: Install production dependencies
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Write server config from secrets
         env:
@@ -46,12 +74,16 @@ jobs:
           APP_KEY: ${{ secrets.APP_KEY }}
           ADMIN_USER: ${{ secrets.ADMIN_USER }}
           ADMIN_PASSWORD_HASH: ${{ secrets.ADMIN_PASSWORD_HASH }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           NOTIFY_EMAIL: ${{ secrets.NOTIFY_EMAIL }}
           MAIL_FROM: ${{ secrets.MAIL_FROM }}
           PRIVACY_EMAIL: ${{ secrets.PRIVACY_EMAIL }}
         run: php bin/make-config.php > app/config.local.php
 
-      # Uploads app/, storage/.htaccess and public_html/ into FTP_SERVER_DIR, so
+      # Uploads app/, vendor/, storage/.htaccess and public_html/ into FTP_SERVER_DIR, so
       # FTP_SERVER_DIR must be the folder that CONTAINS public_html (see README).
       - name: Upload to Hostinger over FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -69,6 +101,9 @@ jobs:
             bin/**
             storage/*.sqlite*
             storage/*.log
+            storage/*.ok
             storage/sessions/**
             *.md
+            composer.json
+            composer.lock
             .editorconfig
