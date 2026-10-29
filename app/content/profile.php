@@ -11,14 +11,16 @@ return [
     'role'    => 'Founder & Technical Architect',
     'tagline' => 'Cybersecurity, IT infrastructure and software engineering. Not only managing projects, but building, implementing and optimising them.',
     'summary' => [
-        'Over 10 years of experience managing and hands-on delivering projects across Cybersecurity, IT Infrastructure and Software Engineering, from technical implementation and architecture to system optimisation.',
+        "I'm Manu Francis. For over 10 years I have managed and hands-on delivered projects across Cybersecurity, IT Infrastructure and Software Engineering, from technical implementation and architecture to system optimisation.",
         'My focus is cybersecurity research, security-conscious project development and end-to-end security implementation. I founded Halosec Cyber Defense LLP and Phoger Edwhere Learning LLP, and I am the technical architect of both.',
     ],
 
-    // Search results and link previews. Title 50-60 chars, description under 160.
+    // Search results and link previews. Target search: "Manu Francis". Title 50-60 chars, description under 160.
     'seo' => [
         'title'       => 'Manu Francis | Cybersecurity Architect, Trainer & Founder',
-        'description' => 'Manu Francis, founder and technical architect of Halosec Cyber Defense and Edwhere Learning. CEH, CEI, CSA. 40,000+ students trained, 100+ orgs secured.',
+        'description' => 'Manu Francis is the founder and technical architect of Halosec Cyber Defense and Edwhere Learning. CEH, CEI, CSA. 40,000+ students trained. Get in touch.',
+        // Third-person bio for structured data (search engines' knowledge of who Manu is).
+        'bio'         => 'Manu Francis is the founder and technical architect of Halosec Cyber Defense LLP and Phoger Edwhere Learning LLP, with over 10 years in cybersecurity, IT infrastructure and software engineering.',
     ],
 
     // All verified as Manu's own accounts (username: phogerman).

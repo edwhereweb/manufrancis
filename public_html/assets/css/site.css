@@ -400,3 +400,6 @@ p { margin: 0 0 1em; }
 .btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
 .created { margin-bottom: 20px; border-color: #b7ebd5; background: var(--mint-soft); }
 .narrow-left { max-width: 640px; }
+.venture-link { color: inherit; }
+.venture-link span { color: var(--blue); font-size: .8em; }
+.venture-link:hover { color: var(--blue); text-decoration: none; }

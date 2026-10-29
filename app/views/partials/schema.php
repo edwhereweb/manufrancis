@@ -10,10 +10,20 @@ function profile_schema(array $p, string $siteUrl): array
 {
     $eccouncil = ['@type' => 'Organization', 'name' => 'EC-Council', 'url' => 'https://www.eccouncil.org'];
 
-    return [
-        '@context'     => 'https://schema.org',
+    $website = [
+        '@type'         => 'WebSite',
+        '@id'           => $siteUrl . '/#website',
+        'url'           => $siteUrl . '/',
+        'name'          => $p['name'],               // the site name Google shows in results
+        'alternateName' => 'manufrancis.com',
+        'inLanguage'    => 'en',
+        'publisher'     => ['@id' => $siteUrl . '/#person'],
+    ];
+
+    return ['@context' => 'https://schema.org', '@graph' => [$website, [
         '@type'        => 'ProfilePage',
         '@id'          => $siteUrl . '/#profile',
+        'isPartOf'     => ['@id' => $siteUrl . '/#website'],
         'url'          => $siteUrl . '/',
         'name'         => $p['seo']['title'],
         'description'  => $p['seo']['description'],
@@ -26,7 +36,9 @@ function profile_schema(array $p, string $siteUrl): array
             'alternateName' => 'phogerman',
             'url'           => $siteUrl . '/',
             'image'         => $siteUrl . '/assets/img/photos/manu-francis-headshot.webp',
-            'description'   => $p['summary'][0],
+            'description'   => $p['seo']['bio'],
+            'givenName'     => 'Manu',
+            'familyName'    => 'Francis',
             'jobTitle'      => $p['role'],
             'worksFor'      => array_map(fn ($v) => ['@type' => 'Organization', 'name' => $v['name'], 'url' => $v['url']], $p['ventures']),
             'award'         => $p['award']['title'],
@@ -39,5 +51,5 @@ function profile_schema(array $p, string $siteUrl): array
             'knowsAbout'    => ['Cybersecurity', 'IT Infrastructure', 'Software Engineering', 'Security Operations', 'Ethical Hacking', 'Cybersecurity Training'],
             'sameAs'        => array_column($p['social'], 'url'),
         ],
-    ];
+    ]]];
 }

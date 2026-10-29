@@ -16,7 +16,7 @@ $aria = fn (string $field) => isset($errors[$field]) ? ' aria-invalid="true" ari
     <div class="hero-copy reveal">
       <p class="kicker"><span class="dot" aria-hidden="true"></span> Founder &amp; Technical Architect</p>
       <h1><?= e($p['name']) ?></h1>
-      <p class="hero-line">Builds secure systems.<br><span class="grad">Trains the people who run them.</span></p>
+      <p class="hero-line">Builds secure systems.<br> <span class="grad">Trains the people who run them.</span></p>
       <p class="lead"><?= e($p['tagline']) ?></p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#contact">Work with me</a>
@@ -65,7 +65,7 @@ $aria = fn (string $field) => isset($errors[$field]) ? ' aria-invalid="true" ari
       <img src="<?= $img('photos/manu-francis-headshot.webp') ?>" width="500" height="500" alt="Portrait of Manu Francis" loading="lazy">
     </div>
     <div class="reveal d1">
-      <p class="eyebrow">About</p>
+      <p class="eyebrow">About Manu Francis</p>
       <h2>Hands-on, security-first. From architecture to implementation.</h2>
       <?php foreach ($p['summary'] as $para) : ?>
         <p class="body-lg"><?= e($para) ?></p>
@@ -104,7 +104,7 @@ $aria = fn (string $field) => isset($errors[$field]) ? ' aria-invalid="true" ari
       <?php foreach ($p['ventures'] as $i => $v) : ?>
         <article class="venture reveal d<?= $i ?>">
           <div class="venture-logo"><img src="<?= $img($v['logo']) ?>"<?= img_size($v['logo']) ?> alt="<?= e($v['name']) ?> logo" loading="lazy"></div>
-          <h3><?= e($v['name']) ?></h3>
+          <h3><a class="venture-link" href="<?= e($v['url']) ?>" target="_blank" rel="noopener"><?= e($v['name']) ?> <span aria-hidden="true">&#8599;</span></a></h3>
           <p class="muted"><?= e($v['role']) ?></p>
           <ul class="ticks">
             <?php foreach ($v['points'] as $pt) : ?><li><?= e($pt) ?></li><?php endforeach; ?>
