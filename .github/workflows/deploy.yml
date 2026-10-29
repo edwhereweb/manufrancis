@@ -1,0 +1,74 @@
+name: Test and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_sqlite, mbstring
+          coverage: none
+      - name: Lint
+        run: find app public_html bin tests -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Tests
+        run: php tests/run.php
+
+  deploy:
+    needs: test
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Write server config from secrets
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+          APP_KEY: ${{ secrets.APP_KEY }}
+          ADMIN_USER: ${{ secrets.ADMIN_USER }}
+          ADMIN_PASSWORD_HASH: ${{ secrets.ADMIN_PASSWORD_HASH }}
+          NOTIFY_EMAIL: ${{ secrets.NOTIFY_EMAIL }}
+          MAIL_FROM: ${{ secrets.MAIL_FROM }}
+          PRIVACY_EMAIL: ${{ secrets.PRIVACY_EMAIL }}
+        run: php bin/make-config.php > app/config.local.php
+
+      # Uploads app/, storage/.htaccess and public_html/ into FTP_SERVER_DIR, so
+      # FTP_SERVER_DIR must be the folder that CONTAINS public_html (see README).
+      - name: Upload to Hostinger over FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          protocol: ftps
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            tests/**
+            bin/**
+            storage/*.sqlite*
+            storage/*.log
+            storage/sessions/**
+            *.md
+            .editorconfig

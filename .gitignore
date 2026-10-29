@@ -1,0 +1,15 @@
+# Secrets: written on deploy from GitHub secrets
+app/config.local.php
+
+# Runtime data: leads database, sessions, logs
+storage/*
+!storage/.htaccess
+
+.ftp-deploy-sync-state.json
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local tooling
+.claude/

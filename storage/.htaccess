@@ -1,0 +1,2 @@
+# Safety net: leads database, sessions and logs. Never reachable from the web.
+Require all denied
