@@ -6,14 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title><?= e($title) ?> | Admin</title>
+  <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
   <link rel="stylesheet" href="<?= e(asset('css/site.css')) ?>">
   <script src="<?= e(asset('js/site.js')) ?>" defer></script>
 </head>
 <body class="admin">
   <header class="nav">
     <div class="wrap nav-inner">
-      <a class="brand" href="/admin/leads"><span class="brand-mark" aria-hidden="true">MF</span> Leads</a>
+      <a class="brand" href="/admin/leads"><img class="brand-logo" src="/assets/img/brand/lighthouse-mark.svg" width="26" height="34" alt=""> Leads</a>
       <?php if (admin_logged_in()) : ?>
         <div class="admin-nav">
           <?php $here = request_path(); ?>

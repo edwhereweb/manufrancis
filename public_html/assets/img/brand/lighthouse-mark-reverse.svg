@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 14 80 104" role="img" aria-label="Manu Francis lighthouse mark">
+  <path d="M70 41l26-9v22zM50 41l-26-9v22z" fill="#d4a64a" fill-opacity=".9"/>
+  <path d="M48 32l12-12 12 12z" fill="#ffffff" stroke="#ffffff" stroke-width="4" stroke-linejoin="round"/>
+  <rect x="50" y="34" width="20" height="16" rx="4" fill="#ffffff"/>
+  <circle cx="60" cy="42" r="5" fill="#d4a64a"/>
+  <path d="M52 54h16l5.5 42h-27z" fill="#ffffff" stroke="#ffffff" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M50 72h20" stroke="#d4a64a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M28 108c11-6 21-6 32 0s21 6 32 0" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+</svg>

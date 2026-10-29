@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Manu Francis">
+  <rect width="120" height="120" rx="28" fill="#0b0b0f"/>
+  <path d="M71 43l27-10v23zM49 43l-27-10v23z" fill="#d4a64a" fill-opacity=".9"/>
+  <path d="M47 33l13-13 13 13z" fill="#fff" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
+  <rect x="49" y="35" width="22" height="17" rx="4" fill="#fff"/>
+  <circle cx="60" cy="43.5" r="5.5" fill="#d4a64a"/>
+  <path d="M51 57h18l7 43H44z" fill="#fff" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M48 77h24" stroke="#d4a64a" stroke-width="6" stroke-linecap="round"/>
+</svg>

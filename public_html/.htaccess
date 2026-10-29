@@ -1,5 +1,6 @@
 # Hostinger (LiteSpeed/Apache). This folder is the web root (public_html).
 Options -Indexes -MultiViews
+AddType application/manifest+json .webmanifest
 ServerSignature Off
 
 <IfModule mod_rewrite.c>
@@ -34,7 +35,7 @@ ServerSignature Off
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" "expr=%{HTTPS} == 'on'"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
   Header unset X-Powered-By
-  <FilesMatch "\.(css|js|webp|svg|png|jpg|ico)$">
+  <FilesMatch "\.(css|js|webp|svg|png|jpg|ico|webmanifest)$">
     Header set Cache-Control "public, max-age=2592000"
   </FilesMatch>
 </IfModule>

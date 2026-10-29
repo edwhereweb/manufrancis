@@ -39,6 +39,11 @@ Calm, product-style layout: white and `#f5f5f7` sections, one dark band each for
 - **Illustrations**: inline SVGs in `app/views/partials/illustrations.php`, called with `illo('shield')` etc. They colour themselves from the tile's `--c/--c2/--c3` (set by `.tone-*`) and animate with CSS classes (`spin`, `pulse`, `scan`, `flow`, `blink`, `float`). No `style=""` (CSP).
 - **Motion**: add `reveal` (+ `d1`/`d2` for stagger) to fade a block in on scroll; `data-count` on a stat counts it up. All motion is off under `prefers-reduced-motion`.
 - **Photos**: 1200px wide `.webp`, real event photos only, no stamped/overlaid images. Gallery tiles take `size` `wide` or `normal` in `profile.php`.
+- **Logo (lighthouse, black `#0b0b0f` + gold `#d4a64a`)** lives in `public_html/assets/img/brand/`:
+  `lighthouse-mark.svg` (light backgrounds), `lighthouse-mark-reverse.svg` (dark), `lighthouse-app-icon.svg` (black tile),
+  `manu-francis-logo(-reverse).svg/.png` (mark + name, text outlined in Inter 600), `manu-francis-avatar(-light).png` (1080px social profile picture),
+  `icon-192/512.png`, `icon-maskable-512.png`. Favicons: `public_html/favicon.svg` (simplified, no beams), `favicon.ico` (16/32/48), `apple-touch-icon.png`, `site.webmanifest`.
+  The SVGs are the source; regenerate PNGs and the share card from them if the mark changes. Keep the gold as an accent only.
 
 ## SEO
 

@@ -53,9 +53,10 @@ $shareImage = $siteUrl . '/assets/img/share/manu-francis-share.jpg';
   <meta name="twitter:image" content="<?= e($shareImage) ?>">
   <meta name="twitter:image:alt" content="Manu Francis, Founder &amp; Technical Architect">
   <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
   <link rel="preload" href="/assets/fonts/inter-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="<?= e(asset('css/site.css')) ?>">
   <script src="<?= e(asset('js/site.js')) ?>" defer></script>
@@ -67,7 +68,7 @@ $shareImage = $siteUrl . '/assets/img/share/manu-francis-share.jpg';
   <a class="skip" href="#main">Skip to content</a>
   <header class="nav" id="top">
     <div class="wrap nav-inner">
-      <a class="brand" href="/" aria-label="Manu Francis, home"><span class="brand-mark" aria-hidden="true">MF</span> Manu Francis</a>
+      <a class="brand" href="/" aria-label="Manu Francis, home"><img class="brand-logo" src="/assets/img/brand/lighthouse-mark.svg" width="26" height="34" alt=""> Manu Francis</a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
       <nav id="nav-links" class="nav-links" aria-label="Main">
         <a href="/#about">About</a>

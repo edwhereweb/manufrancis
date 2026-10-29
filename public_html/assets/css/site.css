@@ -86,7 +86,7 @@ p { margin: 0 0 1em; }
 .nav-inner { display: flex; align-items: center; justify-content: space-between; min-height: 60px; gap: 16px; }
 .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 650; letter-spacing: -.02em; }
 .brand:hover { text-decoration: none; }
-.brand-mark { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: var(--ink); color: #fff; font-size: .72rem; font-weight: 750; letter-spacing: 0; }
+.brand-logo { width: auto; height: 34px; }
 .nav-links { display: flex; align-items: center; gap: 28px; font-size: .92rem; }
 .nav-links a:not(.btn) { color: #3a3a40; }
 .nav-links a:not(.btn):hover { color: var(--ink); text-decoration: none; }
