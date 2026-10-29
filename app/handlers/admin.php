@@ -13,6 +13,17 @@ require_once APP_ROOT . '/lib/twofa.php';
 header('X-Robots-Tag: noindex, nofollow');
 header('Cache-Control: no-store');
 
+// The admin needs these PHP extensions (sodium encrypts the 2FA secret). Say which are missing instead of failing later.
+$missing = array_values(array_filter(['sodium', 'mbstring', 'pdo_mysql'], fn ($ext) => !extension_loaded($ext) && !($ext === 'pdo_mysql' && cfg('db_driver') !== 'mysql')));
+if (!is_writable(storage_dir())) {
+    $missing[] = 'write access to the storage/ folder';
+}
+if ($missing) {
+    error_log('Admin unavailable, server is missing: ' . implode(', ', $missing));
+    http_response_code(503);
+    view('admin/server-check', ['title' => 'Server setup needed', 'missing' => $missing], 'admin/layout', 503);
+}
+
 // ---- Step 1: password ------------------------------------------------------
 if ($path === '/admin/login') {
     if (admin_logged_in()) {
